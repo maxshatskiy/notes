@@ -33,7 +33,7 @@ Training script: https://github.com/huggingface/diffusers/tree/main/examples/dre
 **Prior preservation** - technique to valid overfitting by performing special regularization using other examples of the term 
 in addition to those, which were provided.
 
-# Stable diffusion.
+# Stable diffusion
 
 * CLIP embeddings
 * The VAE (variational autoencoders)
@@ -84,7 +84,7 @@ image._
 
 We take normal image and add different amount of noise and train NN to predict amount of noise.
 
-## Unet
+## Prediction of noise
 **NOW we can generate images:** pure noise-->pass to NN--> which part of the input is noise--> how to change 
 every pixel to make and input picture look more like a digit.
 
@@ -93,4 +93,28 @@ The NN, which is used for medical image segmentation: **Unet - the first compone
 **Input to the Unet:** somewhat noisy image, it could be pure noise or image without any noise.
 **Output of the Unet:** is the noise, such that if we substract this noise from input image, 
 then we have noise free image.
-Problem
+
+**Problem**
+image of 512x512x3 colored image has 786432 pixel and therefore training such model will take a lot of time.
+How to train the model more efficiently?
+
+##_**Autoencoder = VAE**_
+
+We know it is possible to compress pictures. If to put picture to a Convolutional layer with stride 2 with 6 channels,
+then we put again and again to a Conv layer with expanding number of channels we can compress it down to 64x64x4 = 16384
+pixels. We can also get the image back using inverse convolution (deconvolution) and restore original image.
+
+If we put a picture to a model, we initially get a random noise, but with loss of MSE, the model tries to get the 
+image inside the model and restore the original image.
+
+Encoder part can be used to compress the image. Having decoder we can restore the compressed image.
+
+The intermediate layer between encoder and decoder contains all the information about image. All 10mln pictures
+are put into encoder and then are feed into nnet unit. It does not take noisy image, but it takes "latent"
+representation of the image. Network predicts noise, which can be substracted from noisy latent, which gives 
+actual latents. Then the latents are output to the decoder, which outputs a large image.
+
+**VAE** is optional, but saves a lot of time and money.
+
+
+
