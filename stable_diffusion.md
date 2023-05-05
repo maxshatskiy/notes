@@ -46,7 +46,10 @@ algorithm.
 
 **Schedulers:** PNDM, DDIM, K-LMS.
 
-Explanation of Stable Diffusion due to Jeremy Howard:
+Explanation of Stable Diffusion due to Jeremy Howard.
 
-
+Stable diffusion for handwritten digits.
+image(x1) -->black-box model--> probability that x1 is handwritten digit p(x1)=0.98
+image(x2) -->black-box model--> probability that x2 is handwritten digit p(x2)=0.4
+image(x3) -->black-box model--> probability that x3 is handwritten digit p(x3)=0.02
 
