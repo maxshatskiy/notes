@@ -154,6 +154,11 @@ then subtracted from a noisy image and got a deionised image, which is closer to
 repeat this process. Which C to use? How to substract the noise? The C is analogous to LR and therefore concepts
 of "momentum" and "adam" can be used.
 
+All diffusion models, take image with noise, original image and time stamp t (if we think about this approach as 
+in differential equations).
+
+
+
 
 
 
