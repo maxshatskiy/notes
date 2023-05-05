@@ -114,7 +114,50 @@ are put into encoder and then are feed into nnet unit. It does not take noisy im
 representation of the image. Network predicts noise, which can be substracted from noisy latent, which gives 
 actual latents. Then the latents are output to the decoder, which outputs a large image.
 
-**VAE** is optional, but saves a lot of time and money.
+**VAE** is optional, but saves a lot of time and money since it reduced dimention based on which model for 
+noise prediction is trained.
+
+**Change**: make input to NN pixels+one hot encoded version of the original image, this model should be better 
+at predicting noise, since it knows what was actual input.
+Now if we feed actual image of the digit, then the model makes prediction of the noise. In this way we give guidance
+of what the image we are trying to create.
+
+**How to do to create input for "cute teddy"?** How to turn this text to embedding?
+
+We need a model, which takes "cute teddy" and outputs representation on how it could be expressed.
+To train such a model we need an image and a text tag.
+Based on this we can create: 
+1. text --> textencoder --> random vector, if the model was not trained
+2. image --> imageencoder --> random vector, if the model was not trained
+we would like that vector ouputs of both encoders for similar objects are similar, we want dot product
+should be big. and the text and image, which are not similar should have a small dot product.
+Then we can add this dot product of those which should be similar and substract for those which should be not similar
+then we can train text and image encoders, which give text and image embeddings. Now text and image are in the same 
+features space. This model ise CLIP, which is trained with Contrastive Loss. 
+
+CLIP test encoder takes text and outputs embeddings. Similar text gives similar embeddings.
+
+The outputs of text encoder now can be used to train a network which is used to predict noise.
+
+Text-->text encoder--> embeddings (similar to embeddings of the images)-->train noise prediction network
+Now Unet can be guided by text captions.
+
+**Score function** - gradients of the loss with respect to pixel values.
+
+**Time stamps**. we used various level of noise. it is possible to create a noise schedule - a monotonically decreasing
+function f(t)-which returns the amount of noise. This is a way to pick of how much noise to use.
+We could think of simply of jow much noise to use - this is defined by beta.
+We randomly pick a minibatch, we randomly pick a image and randomly pick a t and then pick noise.
+
+**Inference.** Model starts with noise, then we multiplied prediction of the noise and multiplied by a constant,
+then subtracted from a noisy image and got a deionised image, which is closer to the better image. Then we have to
+repeat this process. Which C to use? How to substract the noise? The C is analogous to LR and therefore concepts
+of "momentum" and "adam" can be used.
+
+
+
+
+
 
 
 
