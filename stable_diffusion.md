@@ -46,10 +46,51 @@ algorithm.
 
 **Schedulers:** PNDM, DDIM, K-LMS.
 
-Explanation of Stable Diffusion due to Jeremy Howard.
+**Explanation of Stable Diffusion due to Jeremy Howard.**
 
 Stable diffusion for handwritten digits.
-image(x1) -->black-box model--> probability that x1 is handwritten digit p(x1)=0.98
-image(x2) -->black-box model--> probability that x2 is handwritten digit p(x2)=0.4
-image(x3) -->black-box model--> probability that x3 is handwritten digit p(x3)=0.02
+image(x1) -->black-box model (f)--> probability that x1 is handwritten digit p(x1)=0.98
+image(x2) -->black-box model (f)--> probability that x2 is handwritten digit p(x2)=0.4
+image(x3) -->black-box model (f)--> probability that x3 is handwritten digit p(x3)=0.02
+If we have this black-box model (f) then we can generate a new handwritten digits.
 
+We change on pixel of an image -->black-box model (f)--> probability changes, for example increases
+We can change every pixel one by one and see how it changes the probability of the changed picture beeing handwritten
+
+We found a gradient of probability with respect to change of every pixel value.
+Instead of changing the weights we change pixels of the input image by a gradient, which we obtained and
+obtain a new image, which is more likely looks like a handwritten digit.
+
+Any arbitrary noisy input to a desired picture.
+
+Finite-differencing of calculating derivative is very slow.
+
+**The problem, we do not have a function f, which provides a probabilities.**
+We need a NN, which can decide which pixels to change to get a picture, which looks as hands written digit.
+
+We can take a TRUE handwritten digit and add some noise, then some more noise, then more and 
+then predict probabilities that those figures are handwritten digits.
+
+Or we can cast the problem in another way: we can predict noise, which was added to original image.
+
+The amount of noise says us "how much is the figure is a digit".
+Here we think about NN as a box having INPUT, OUTPUT and LOSS function and derivative is used to update weight.
+INPUTS are images with different amount of noise, OUTPUTS: the amount of noise 
+at the image (parameters of the mean and variance), or we can predict not amount of noise, but actual noise itself.
+
+_IF we can predict the noise, then we get a "derivative" or the answer to the question "by how much" should we
+change the pixel values to bring the image to the one, which has higher probability of being an image of handwritten
+image._
+
+We take normal image and add different amount of noise and train NN to predict amount of noise.
+
+###### Unet
+**NOW we can generate images:** pure noise-->pass to NN--> which part of the input is noise--> how to change 
+every pixel to make and input picture look more like a digit.
+
+The NN, which is used for medical image segmentation: **Unet - the first component of Stable Diffusion.**
+
+**Input to the Unet:** somewhat noisy image, it could be pure noise or image without any noise.
+**Output of the Unet:** is the noise, such that if we substract this noise from input image, 
+then we have noise free image.
+Problem
