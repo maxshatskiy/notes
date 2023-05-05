@@ -1,4 +1,4 @@
-###### Preliminary introduction
+# Preliminary introduction
 
 **Classifier-free guidance** - is a method to increase the adherence of the output to the 
 conditioning signal (in our case text). Details about guidance for generative models: https://sander.ai/2022/05/26/guidance.html
@@ -33,7 +33,7 @@ Training script: https://github.com/huggingface/diffusers/tree/main/examples/dre
 **Prior preservation** - technique to valid overfitting by performing special regularization using other examples of the term 
 in addition to those, which were provided.
 
-###### Stable diffusion.
+# Stable diffusion.
 
 * CLIP embeddings
 * The VAE (variational autoencoders)
@@ -84,7 +84,7 @@ image._
 
 We take normal image and add different amount of noise and train NN to predict amount of noise.
 
-###### Unet
+## Unet
 **NOW we can generate images:** pure noise-->pass to NN--> which part of the input is noise--> how to change 
 every pixel to make and input picture look more like a digit.
 
