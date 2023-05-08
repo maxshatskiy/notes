@@ -157,6 +157,54 @@ of "momentum" and "adam" can be used.
 All diffusion models, take image with noise, original image and time stamp t (if we think about this approach as 
 in differential equations).
 
+# Latents
+
+General diffusion models are machine learning systems that are trained to denoise random Gaussian noise step by step
+to get to a sample of interest such as an image. Hugging face diffusers: 
+https://colab.research.google.com/github/huggingface/notebooks/blob/main/diffusers/diffusers_intro.ipynb
+
+Diffusion models operates on pixel space and therefore slow --> latent diffusion operate in lower dimensional space
+and the model is trained to represent a compressed representation of image.
+
+# Papers
+
+## Distillation
+### Progressive Distillation for Fast Sampling of Diffusion Models
+
+We take a teacher - slow and big NN, and teach a students, which is faster.
+The reason why original diffusion process gets significant number of steps.
+We train a new model, which takes as input and intermediate image of diffusion process, and compare it with final
+model, which we want to get.
+Teacher model is a complete Stable Diffusion model.
+Noise-->Step 1 --> Step 2, then we train student model, which can run directly noise-->2, then this model becomes a 
+teacher.
+
+### On Distillation of Guided Diffusion Models
+Classifier-free guided diffusion models (CFGD). We put prompt and an empty prompt. Then we get puppy and empty prompt
+then we get average and process further with diffusion.
+CFGD - without prompt.
+
+
+Student model gets noise, prompt, guidance.
+
+### Imagic: text-based real image editing with diffusion models
+Modifying part of the picture with a prompt. Dog can be modified to "as sitting dog", etc.
+1. Start with Stable Diffusion model
+2. Text--> text encoder--> Diffusion model
+3. Fine tune embedding --> to output as input image, which was provided as reference
+4. Fine-tune entire model--> text embeddings are fixed
+5. Target embedding+slightly modified embedding into fine-tuned model and we get modified photo.
+
+## Pipeline
+1. CLIP tokenizer - split to units. everything should be the same length, therefore padding is used
+2. CLIP encoder - take input token and get embeddings. For classifier free guidance we need embeddings for empty string.
+3. Prompt embeddings and empty string embeddings are concatenated.
+4. VAE
+5. UNET
+
+Scaling of random noise - depending on the stage we have to scale noise and keep variance in control.
+Timestampas are not integers and this number defines amount of noise applied.
+??? Guidance Scale -???
 
 
 
